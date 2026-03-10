@@ -1,0 +1,215 @@
+# gensbp
+
+sing-box configuration generator - automatically generate sing-box config from subscription URLs
+
+### Installation
+
+```bash
+# Clone the project
+git clone <repo-url>
+cd gensbp
+
+# Install with uv (recommended)
+uv venv
+uv pip install -e .
+
+# Or with pip
+pip install -e .
+```
+
+### Configuration Files
+
+Create the following files in `~/.config/gensbp/`:
+
+#### config.json
+Main configuration file with default values:
+
+```json
+{
+  "node_url": "https://your-subscription-url",
+  "template": "template.json",
+  "outbound_presets": "outbound-presets.json",
+  "outbound_rules": "outbound-rules.json",
+  "dial_fields": "dial-fields.json"
+}
+```
+
+#### template.json
+Base sing-box configuration template:
+
+```json
+{
+  "log": { "level": "info" },
+  "dns": { ... },
+  "inbounds": [ ... ],
+  "outbounds": []
+}
+```
+
+#### outbound-presets.json
+Preset outbound configurations (e.g., direct, block):
+
+```json
+[
+  {
+    "tag": "direct",
+    "type": "direct"
+  },
+  {
+    "tag": "block",
+    "type": "block"
+  }
+]
+```
+
+#### outbound-rules.json
+Node grouping rules:
+
+```json
+{
+  "selector_groups": {
+    "🇭🇰 Hong Kong": {
+      "filter": "香港|HK|Hong Kong",
+      "preserve_order": true
+    }
+  },
+  "urltest_groups": {
+    "⚡ Auto": {
+      "filter": ".*"
+    }
+  }
+}
+```
+
+- `filter`: Regex pattern to match node tags
+- `preserve_order`: Keep original order from template
+
+#### dial-fields.json (Optional)
+Additional dial fields for all nodes:
+
+```json
+{
+  "tcp_fast_open": true,
+  "tcp_multi_path": true
+}
+```
+
+#### extra-nodes.json (Optional)
+Manually added extra nodes:
+
+```json
+[
+  {
+    "tag": "Backup",
+    "type": "vmess",
+    "server": "example.com",
+    "server_port": 443
+  }
+]
+```
+
+### Patch System
+
+Patch files use `::` prefix syntax to modify configurations:
+
+```json
+{
+  // Overwrite value
+  "::log::level": "debug",
+
+  // Merge value
+  "::dns+": {
+    "servers": [
+      {
+        "tag": "dns-local",
+        "address": "local"
+      }
+    ]
+  },
+
+  // Delete key
+  "x::experimental": null,
+
+  // Replace entire config
+  "::": { ... }
+}
+```
+
+**Patch Operators:**
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `::key` | Overwrite value | `"::log::level": "debug"` |
+| `::key+` | Merge value (dict merge, list concat) | `"::outbounds+": [...]` |
+| `x::key` | Delete key | `"x::experimental": null` |
+| `::` | Replace entire config | `"::": {...}` |
+| `::+` | Merge entire config | `"::+": {...}` |
+
+### Usage
+
+```bash
+# Run directly
+python main.py -o output.json
+
+# Override config with CLI
+python main.py -o output.json -n <subscription-url>
+
+# Specify template
+python main.py -o output.json -t custom-template.json
+
+# Using patches
+python main.py -o output.json -p patch.json
+
+# Multiple patches (applied in order)
+python main.py -o output.json -p patch1.json -p patch2.json
+
+# Add extra nodes
+python main.py -o output.json --extra extra-nodes.json
+
+# Bypass cache
+python main.py -o output.json --no-cache
+```
+
+### Command Line Arguments
+
+| Argument | Short | Description | Required |
+|----------|-------|-------------|----------|
+| `--output` | `-o` | Output file path | ✅ |
+| `--template` | `-t` | Template file path | ❌ |
+| `--node-url` | `-n` | Subscription URL | ❌ |
+| `--patch` | `-p` | Patch files (multiple) | ❌ |
+| `--extra` | `-e` | Extra nodes file | ❌ |
+| `--outbound-presets` | | Outbound presets file | ❌ |
+| `--outbound-rules` | | Outbound rules file | ❌ |
+| `--no-cache` | | Bypass cache | ❌ |
+
+### Node Grouping Mechanism
+
+1. **Filter by Rules** - Match node tags using regex patterns
+2. **Auto Create Extra Groups** - Extra nodes go into "➕ 附加" group
+3. **Clean Empty Groups** - Auto-remove groups with no matching nodes
+4. **Cascade Cleanup** - If a group is deleted, references are updated
+
+### Caching
+
+- **Cache Directory**: `~/.cache/gensbp/`
+- **Cache Duration**: 6 hours
+- **Cache Key**: MD5 hash of subscription URL
+
+### Project Structure
+
+```
+gensbp/
+├── main.py              # Entry point
+├── src/
+│   ├── cli.py           # CLI implementation
+│   ├── config/          # Configuration module
+│   ├── core/            # Core functionality
+│   └── utils/           # Utility functions
+├── pyproject.toml       # Project config
+└── README.md
+```
+
+### License
+
+MIT
