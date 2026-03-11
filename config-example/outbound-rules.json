@@ -1,0 +1,88 @@
+{
+  "selector_groups": {
+    "🌐 规则集": {
+      "type": "selector",
+      "filter": ".*",
+      "preserve_order": true
+    },
+    "🚀 节点选择": {
+      "type": "selector",
+      "filter": ".*",
+      "preserve_order": true
+    },
+    "💰 低倍率": {
+      "type": "selector",
+      "filter": "倍率.*[0\\.]+[235]",
+      "preserve_order": true
+    },
+    "🐝 原生": {
+      "type": "selector",
+      "filter": "原生",
+      "preserve_order": true
+    },
+    "🇭🇰 香港": {
+      "type": "selector",
+      "filter": "香港",
+      "preserve_order": true
+    },
+    "🇺🇸 美国": {
+      "type": "selector",
+      "filter": "美国",
+      "preserve_order": true
+    },
+    "🇯🇵 日本": {
+      "type": "selector",
+      "filter": "日本",
+      "preserve_order": true
+    },
+    "🇹🇼 台湾": {
+      "type": "selector",
+      "filter": "台湾",
+      "preserve_order": true
+    },
+    "🇸🇬 新加坡": {
+      "type": "selector",
+      "filter": "新加坡",
+      "preserve_order": true
+    },
+    "🐟 漏网之鱼": {
+      "type": "selector",
+      "filter": ".*",
+      "preserve_order": true
+    }
+  },
+  "urltest_groups": {
+    "🎈 自动选择": {
+      "type": "urltest",
+      "filter": ".*"
+    },
+    "💰 低倍率 自动": {
+      "type": "urltest",
+      "filter": "倍率.*[0\\.]+[235]"
+    },
+    "🐝 原生 自动": {
+      "type": "urltest",
+      "filter": "原生"
+    },
+    "🇭🇰 香港 自动": {
+      "type": "urltest",
+      "filter": "香港"
+    },
+    "🇺🇸 美国 自动": {
+      "type": "urltest",
+      "filter": "美国"
+    },
+    "🇯🇵 日本 自动": {
+      "type": "urltest",
+      "filter": "日本"
+    },
+    "🇹🇼 台湾 自动": {
+      "type": "urltest",
+      "filter": "台湾"
+    },
+    "🇸🇬 新加坡 自动": {
+      "type": "urltest",
+      "filter": "新加坡"
+    }
+  }
+}

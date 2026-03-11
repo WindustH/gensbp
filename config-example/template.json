@@ -1,0 +1,34 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "output": "",
+    "timestamp": true
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "cache_id": "",
+      "store_fakeip": true,
+      "store_rdrc": true,
+      "rdrc_timeout": "7d"
+    }
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "0.0.0.0",
+      "listen_port": 8889,
+      "tcp_fast_open": false,
+      "tcp_multi_path": false,
+      "udp_fragment": false
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "final": "🐟 漏网之鱼",
+    "default_domain_resolver": "ali-223-dns"
+  }
+}

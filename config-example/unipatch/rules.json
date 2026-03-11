@@ -1,0 +1,136 @@
+{
+  "::route::rules": [
+    {
+      "action": "hijack-dns",
+      "protocol": "dns"
+    },
+    {
+      "action": "reject",
+      "rule_set": ["Category-Ads"]
+    },
+    {
+      "action": "reject",
+      "protocol": "quic"
+    },
+    {
+      "action": "route",
+      "rule_set": ["pixiv-site"],
+      "outbound": "✏️ Pixiv"
+    },
+    {
+      "action": "route",
+      "rule_set": ["github-site"],
+      "outbound": "🐙 Github"
+    },
+    {
+      "action": "route",
+      "rule_set": ["apple-cn-site"],
+      "outbound": "🍎 Apple CN"
+    },
+    {
+      "action": "route",
+      "rule_set": ["apple-site"],
+      "outbound": "🍎 Apple"
+    },
+    {
+      "action": "route",
+      "rule_set": ["microsoft@cn-site"],
+      "outbound": "⬜ Microsoft CN"
+    },
+    {
+      "action": "route",
+      "rule_set": ["microsoft-site"],
+      "outbound": "⬜ Microsoft"
+    },
+    {
+      "action": "route",
+      "rule_set": ["steam@cn-site"],
+      "outbound": "🚗 Steam CN"
+    },
+    {
+      "action": "route",
+      "rule_set": ["steam-site"],
+      "outbound": "🚗 Steam"
+    },
+    {
+      "action": "route",
+      "rule_set": ["instagram-site"],
+      "outbound": "🌈 Meta"
+    },
+    {
+      "action": "route",
+      "rule_set": ["facebook-site"],
+      "outbound": "🌈 Meta"
+    },
+    {
+      "action": "route",
+      "rule_set": ["meta-site"],
+      "outbound": "🌈 Meta"
+    },
+    {
+      "action": "route",
+      "rule_set": ["openai-site"],
+      "outbound": "🤖 OpenAI"
+    },
+    {
+      "action": "route",
+      "rule_set": ["google-site"],
+      "outbound": "🐢 Google"
+    },
+    {
+      "action": "route",
+      "rule_set": ["google-ip"],
+      "outbound": "🐢 Google"
+    },
+    {
+      "action": "route",
+      "rule_set": ["sg"],
+      "outbound": "🇸🇬 新加坡"
+    },
+    {
+      "action": "route",
+      "rule_set": ["tw"],
+      "outbound": "🇹🇼 台湾"
+    },
+    {
+      "action": "route",
+      "rule_set": ["hk"],
+      "outbound": "🇭🇰 香港"
+    },
+    {
+      "action": "route",
+      "rule_set": ["jp"],
+      "outbound": "🇯🇵 日本"
+    },
+    {
+      "action": "route",
+      "rule_set": ["us"],
+      "outbound": "🇺🇸 美国"
+    },
+    {
+      "action": "route",
+      "rule_set": ["GeoSite-Private"],
+      "outbound": "🎯 全球直连"
+    },
+    {
+      "action": "route",
+      "rule_set": ["GeoSite-CN"],
+      "outbound": "🎯 全球直连"
+    },
+    {
+      "action": "route",
+      "rule_set": ["GeoIP-Private"],
+      "outbound": "🎯 全球直连"
+    },
+    {
+      "action": "route",
+      "rule_set": ["GeoIP-CN"],
+      "outbound": "🎯 全球直连"
+    },
+    {
+      "action": "route",
+      "rule_set": ["GeoLocation-!CN"],
+      "outbound": "🚀 节点选择"
+    }
+  ]
+}

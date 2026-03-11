@@ -1,0 +1,69 @@
+{
+  "::dns": {
+    "servers": [
+      {
+        "tag": "114",
+        "type": "udp",
+        "server_port": 53,
+        "server": "114.114.114.114"
+      },
+      {
+        "tag": "ali-223",
+        "type": "udp",
+        "server_port": 53,
+        "server": "223.5.5.5"
+      },
+      {
+        "tag": "google-8",
+        "type": "udp",
+        "server_port": 53,
+        "server": "8.8.8.8",
+        "detour": "🌐 规则集"
+      },
+      {
+        "tag": "ali-223-dns",
+        "type": "https",
+        "server_port": 443,
+        "server": "223.5.5.5",
+        "path": "/dns-query"
+      },
+      {
+        "tag": "google-8-dns",
+        "type": "tls",
+        "server_port": 853,
+        "server": "8.8.8.8",
+        "detour": "🌐 规则集"
+      },
+      {
+        "tag": "1-dns",
+        "type": "https",
+        "server_port": 443,
+        "server": "1.1.1.1",
+        "path": "/dns-query",
+        "detour": "🌐 规则集"
+      }
+    ],
+    "rules": [
+      {
+        "action": "route",
+        "rule_set": ["GeoLocation-!CN"],
+        "server": "google-8-dns"
+      },
+      {
+        "action": "route",
+        "rule_set": ["GeoIP-CN"],
+        "server": "ali-223-dns"
+      },
+      {
+        "action": "route",
+        "rule_set": ["GeoSite-CN"],
+        "server": "ali-223-dns"
+      }
+    ],
+    "disable_cache": false,
+    "disable_expire": false,
+    "independent_cache": true,
+    "final": "ali-223-dns",
+    "strategy": "ipv4_only"
+  }
+}

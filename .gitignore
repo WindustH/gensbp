@@ -30,5 +30,4 @@ env/
 .idea/
 
 # Project specific
-*.json
 !src/gensbp/**/*.json

@@ -41,6 +41,13 @@ def apply_patch(config: Dict[str, Any], patch: Dict[str, Any]) -> Dict[str, Any]
         # Navigate to target path
         path_parts = key[2:].split("::") if len(key) > 2 else []
         log_debug(f"Path parts: {path_parts}")
+
+        # Check for wildcard in path
+        if "*" in path_parts:
+            # Use wildcard operation
+            _apply_wildcard_operation(result, path_parts, is_delete, is_append, patch_value)
+            continue
+
         target = result
         path_exists = True
         for part in path_parts[:-1]:
@@ -79,6 +86,75 @@ def _merge(base: Any, patch: Any) -> Any:
     if isinstance(patch, list) and isinstance(base, list):
         return base + patch
     return patch
+
+
+def _apply_wildcard_operation(
+    target: Any,
+    path_parts: List[str],
+    is_delete: bool,
+    is_append: bool,
+    patch_value: Any,
+) -> None:
+    """Apply patch operation with wildcard support.
+
+    Args:
+        target: Current target (dict or list)
+        path_parts: Remaining path parts (including wildcards)
+        is_delete: Whether this is a delete operation
+        is_append: Whether this is an append/merge operation
+        patch_value: Value to set/merge (None for delete)
+    """
+    if not path_parts:
+        # No more path parts - apply operation at current level
+        # This shouldn't happen in normal usage, but handle it
+        return
+
+    current_part = path_parts[0]
+    remaining_parts = path_parts[1:]
+
+    log_debug(f"Wildcard operation: current_part='{current_part}', remaining={remaining_parts}, "
+              f"is_delete={is_delete}, is_append={is_append}, "
+              f"target_type={type(target).__name__}")
+
+    if current_part == "*":
+        # Wildcard: apply operation to all elements
+        if isinstance(target, list):
+            for item in target:
+                if isinstance(item, dict):
+                    _apply_wildcard_operation(item, remaining_parts, is_delete, is_append, patch_value)
+            return
+        elif isinstance(target, dict):
+            # Apply to all values in dict (if they're dicts)
+            for key, value in target.items():
+                if isinstance(value, dict):
+                    _apply_wildcard_operation(value, remaining_parts, is_delete, is_append, patch_value)
+            return
+
+    # Normal path part (not a wildcard)
+    if remaining_parts:
+        # More path parts to navigate
+        if isinstance(target, dict) and current_part in target:
+            next_target = target[current_part]
+            if isinstance(next_target, dict) or isinstance(next_target, list):
+                _apply_wildcard_operation(next_target, remaining_parts, is_delete, is_append, patch_value)
+        # If path doesn't exist and we're deleting, that's fine
+        # If path doesn't exist and we're setting/merging, we need to create it
+        elif not is_delete and not is_append:
+            # Creating new path for set operation
+            # For now, we'll only create if the next part is not a wildcard
+            if remaining_parts and remaining_parts[0] != "*":
+                target[current_part] = {}
+                _apply_wildcard_operation(target[current_part], remaining_parts, is_delete, is_append, patch_value)
+    else:
+        # Final key - apply the operation
+        if isinstance(target, dict):
+            if is_delete:
+                if current_part in target:
+                    del target[current_part]
+            elif is_append and current_part in target:
+                target[current_part] = _merge(target[current_part], patch_value)
+            else:
+                target[current_part] = patch_value
 
 
 def apply_patches(config: Dict[str, Any], patch_paths: List[str]) -> Dict[str, Any]:

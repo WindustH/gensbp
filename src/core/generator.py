@@ -150,13 +150,6 @@ class SingboxCfgGenerator:
         if not self.config:
             return False
 
-        # Apply patches
-        if self.patch_paths:
-            log_info(f"Applying {len(self.patch_paths)} patch(es)...")
-            self.config = apply_patches(self.config, self.patch_paths)
-            for patch_path in self.patch_paths:
-                log_success(f"Applied patch: {patch_path}")
-
         # Download and parse nodes
         node_lines = self.download_nodes()
         if not node_lines:
@@ -195,6 +188,14 @@ class SingboxCfgGenerator:
         generate_selector_groups(
             self.config, self.config["outbounds"], group_rules, extra_nodes if extra_nodes else None
         )
+
+        # Apply patches after all nodes are added and groups are generated
+        # This ensures patches that target outbounds (including wildcards) work correctly
+        if self.patch_paths:
+            log_info(f"Applying {len(self.patch_paths)} patch(es)...")
+            self.config = apply_patches(self.config, self.patch_paths)
+            for patch_path in self.patch_paths:
+                log_success(f"Applied patch: {patch_path}")
 
         log_info("Summary:")
         log_info(f"  Nodes: {len(parsed_nodes)}, Extra: {len(extra_nodes)}, Presets: {len(preset_outbounds)}")

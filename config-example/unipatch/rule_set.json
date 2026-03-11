@@ -1,0 +1,204 @@
+{
+  "::route::rule_set": [
+    {
+      "tag": "pixiv-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/pixiv.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "apple-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "apple-cn-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple@cn.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "steam-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/steam.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "instagram-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/instagram.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "openai-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/openai.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "google-ip",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/google.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "google-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/google.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "facebook-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/facebook.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "meta-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/meta.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "github-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/github.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "microsoft-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/microsoft.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "steam@cn-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/steam@cn.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "microsoft@cn-site",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/microsoft@cn.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "us",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/us.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "sg",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/sg.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "tw",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/tw.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "hk",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/hk.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "jp",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/jp.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "Category-Ads",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "GeoIP-Private",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "GeoSite-Private",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "GeoIP-CN",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "GeoSite-CN",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    },
+    {
+      "tag": "GeoLocation-!CN",
+      "type": "remote",
+      "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
+      "format": "binary",
+      "download_detour": "🌐 规则集",
+      "update_interval": "1d"
+    }
+  ]
+}

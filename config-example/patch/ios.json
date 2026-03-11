@@ -1,0 +1,65 @@
+{
+  "x::outbounds::*::domain_resolver": null,
+  "x::route::default_domain_resolver": null,
+  "::inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "mtu": 9000,
+      "address": "172.19.0.1/30",
+      "auto_route": true,
+      "strict_route": true,
+      "platform": {
+        "http_proxy": {
+          "enabled": true,
+          "server": "127.0.0.1",
+          "server_port": 8889
+        }
+      }
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 8889,
+      "tcp_fast_open": false,
+      "tcp_multi_path": false,
+      "udp_fragment": false
+    }
+  ],
+  "::dns::servers": [
+    {
+      "tag": "114",
+      "address": "114.114.114.114",
+      "detour": "🎯 全球直连"
+    },
+    {
+      "tag": "ali-223",
+      "address": "223.5.5.5",
+      "detour": "🎯 全球直连"
+    },
+    {
+      "tag": "google-8",
+      "address": "8.8.8.8",
+      "detour": "🌐 规则集"
+    },
+    {
+      "tag": "ali-223-dns",
+      "address": "https://223.5.5.5/dns-query",
+      "address_resolver": "ali-223",
+      "detour": "🎯 全球直连"
+    },
+    {
+      "tag": "google-8-dns",
+      "address": "tls://8.8.8.8",
+      "address_resolver": "ali-223",
+      "detour": "🌐 规则集"
+    },
+    {
+      "tag": "1-dns",
+      "address": "https://1.1.1.1/dns-query",
+      "address_resolver": "ali-223",
+      "detour": "🌐 规则集"
+    }
+  ]
+}

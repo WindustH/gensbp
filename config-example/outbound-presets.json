@@ -1,0 +1,371 @@
+[
+  {
+    "type": "selector",
+    "tag": "🌐 规则集",
+    "interrupt_exist_connections": true,
+    "default": "iGG-US - 美国鲨鱼2 - 06- 倍率 1"
+  },
+  {
+    "type": "selector",
+    "tag": "🚀 节点选择",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🎈 自动选择",
+      "🇺🇸 美国 自动",
+      "🇭🇰 香港 自动",
+      "💰 低倍率",
+      "🐝 原生"
+    ],
+    "default": "🇭🇰 香港 自动"
+  },
+  {
+    "type": "selector",
+    "tag": "💰 低倍率",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "💰 低倍率 自动"
+    ],
+    "default": "💰 低倍率 自动"
+  },
+  {
+    "type": "selector",
+    "tag": "🇭🇰 香港",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🇭🇰 香港 自动",
+      "💰 低倍率",
+      "🚀 节点选择"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🇺🇸 美国",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🇺🇸 美国 自动",
+      "💰 低倍率",
+      "🚀 节点选择"
+    ],
+    "default": "🇺🇸 美国 自动"
+  },
+  {
+    "type": "selector",
+    "tag": "🇯🇵 日本",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🇯🇵 日本 自动",
+      "💰 低倍率",
+      "🚀 节点选择"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🇹🇼 台湾",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🇹🇼 台湾 自动",
+      "💰 低倍率",
+      "🚀 节点选择"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🇸🇬 新加坡",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🇸🇬 新加坡 自动",
+      "💰 低倍率",
+      "🚀 节点选择"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🐝 原生",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🐝 原生 自动"
+    ],
+    "default": "🐝 原生 自动"
+  },
+  {
+    "type": "selector",
+    "tag": "✏️ Pixiv",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🇭🇰 香港",
+      "🇺🇸 美国",
+      "🐝 原生",
+      "🇯🇵 日本",
+      "💰 低倍率"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🍎 Apple CN",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🇭🇰 香港",
+      "💰 低倍率",
+      "🇺🇸 美国",
+      "🇯🇵 日本",
+      "🐝 原生",
+      "🎯 全球直连"
+    ],
+    "default": "🎯 全球直连"
+  },
+  {
+    "type": "selector",
+    "tag": "🍎 Apple",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "💰 低倍率",
+      "🇭🇰 香港",
+      "🇺🇸 美国",
+      "🇯🇵 日本",
+      "🐝 原生",
+      "🎯 全球直连"
+    ],
+    "default": "🎯 全球直连"
+  },
+  {
+    "type": "selector",
+    "tag": "⬜ Microsoft CN",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "💰 低倍率",
+      "🇯🇵 日本",
+      "🇭🇰 香港",
+      "🇺🇸 美国",
+      "🐝 原生",
+      "🎯 全球直连"
+    ],
+    "default": "🎯 全球直连"
+  },
+  {
+    "type": "selector",
+    "tag": "⬜ Microsoft",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "💰 低倍率",
+      "🇺🇸 美国",
+      "🇯🇵 日本",
+      "🇭🇰 香港",
+      "🐝 原生",
+      "🎯 全球直连"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🐙 Github",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "💰 低倍率",
+      "🇺🇸 美国",
+      "🇯🇵 日本",
+      "🇭🇰 香港",
+      "🐝 原生"
+    ],
+    "default": "🇺🇸 美国"
+  },
+  {
+    "type": "selector",
+    "tag": "🚗 Steam CN",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🎯 全球直连",
+      "💰 低倍率",
+      "🇺🇸 美国",
+      "🇯🇵 日本",
+      "🇭🇰 香港",
+      "🐝 原生"
+    ],
+    "default": "🎯 全球直连"
+  },
+  {
+    "type": "selector",
+    "tag": "🚗 Steam",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🐝 原生",
+      "🇭🇰 香港",
+      "🇯🇵 日本",
+      "🇺🇸 美国",
+      "💰 低倍率",
+      "🎯 全球直连"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🎮 Epic CN",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🎯 全球直连",
+      "💰 低倍率",
+      "🇺🇸 美国",
+      "🇯🇵 日本",
+      "🇭🇰 香港",
+      "🐝 原生"
+    ],
+    "default": "🎯 全球直连"
+  },
+  {
+    "type": "selector",
+    "tag": "🎮 Epic",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🐝 原生",
+      "🇭🇰 香港",
+      "🇯🇵 日本",
+      "🇺🇸 美国",
+      "💰 低倍率",
+      "🎯 全球直连"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "selector",
+    "tag": "🐢 Google",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🐝 原生",
+      "🇺🇸 美国",
+      "🇭🇰 香港",
+      "🇯🇵 日本"
+    ],
+    "default": "🇺🇸 美国"
+  },
+  {
+    "type": "selector",
+    "tag": "🌈 Meta",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🐝 原生",
+      "🇺🇸 美国",
+      "🇭🇰 香港",
+      "🇯🇵 日本"
+    ],
+    "default": "🇺🇸 美国"
+  },
+  {
+    "type": "selector",
+    "tag": "🤖 OpenAI",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🐝 原生",
+      "🇺🇸 美国",
+      "🇭🇰 香港",
+      "🇯🇵 日本"
+    ],
+    "default": "🇺🇸 美国"
+  },
+  {
+    "type": "selector",
+    "tag": "🐟 漏网之鱼",
+    "interrupt_exist_connections": true,
+    "outbounds": [
+      "🚀 节点选择",
+      "🎈 自动选择",
+      "🎯 全球直连",
+      "💰 低倍率"
+    ],
+    "default": "🚀 节点选择"
+  },
+  {
+    "type": "direct",
+    "tag": "🎯 全球直连",
+    "connect_timeout": "10s",
+    "domain_resolver": "ali-223-dns"
+  },
+  {
+    "type": "urltest",
+    "tag": "💰 低倍率 自动",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  },
+  {
+    "type": "urltest",
+    "tag": "🐝 原生 自动",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  },
+  {
+    "type": "urltest",
+    "tag": "🇺🇸 美国 自动",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  },
+  {
+    "type": "urltest",
+    "tag": "🇭🇰 香港 自动",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  },
+  {
+    "type": "urltest",
+    "tag": "🇯🇵 日本 自动",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  },
+  {
+    "type": "urltest",
+    "tag": "🇹🇼 台湾 自动",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  },
+  {
+    "type": "urltest",
+    "tag": "🇸🇬 新加坡 自动",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  },
+  {
+    "type": "urltest",
+    "tag": "🎈 自动选择",
+    "url": "https://www.gstatic.com/generate_204",
+    "interval": "3m",
+    "tolerance": 150,
+    "interrupt_exist_connections": false,
+    "outbounds": []
+  }
+]

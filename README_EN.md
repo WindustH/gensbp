@@ -131,7 +131,12 @@ Patch files use `::` prefix syntax to modify configurations:
   "x::experimental": null,
 
   // Replace entire config
-  "::": { ... }
+  "::": { ... },
+
+  // Wildcard operations - batch modify all elements in lists or dicts
+  "x::outbounds::*::domain_resolver": null,  // Delete domain_resolver from all outbounds
+  "::servers::*::enabled": true,             // Set enabled to true for all servers
+  "::groups::*::nodes::*::priority": 10      // Nested wildcards: set priority to 10 for all nodes in all groups
 }
 ```
 
@@ -144,6 +149,22 @@ Patch files use `::` prefix syntax to modify configurations:
 | `x::key` | Delete key | `"x::experimental": null` |
 | `::` | Replace entire config | `"::": {...}` |
 | `::+` | Merge entire config | `"::+": {...}` |
+
+**Wildcard `*` Support:**
+
+Wildcard `*` can be used in paths to match all elements at the current level (each element in a list or each value in a dict). Supports nested wildcards.
+
+| Pattern | Description |
+|------|------|
+| `::path::to::list::*::key` | Set `key` field for each element in the list |
+| `x::path::to::dict::*::key` | Delete `key` field from each value in the dict |
+| `::path::*::subpath::*::field` | Nested wildcards, matches multi-level structures |
+
+**Notes:**
+- Wildcards only operate on dict or list elements
+- For lists, wildcard iterates all elements (only processes dict-type elements)
+- For dicts, wildcard iterates all values (only processes dict-type values)
+- Append operations `+` also support wildcards (e.g., `::list::*::tags+`)
 
 ### Usage
 
@@ -189,6 +210,7 @@ python main.py -o output.json --no-cache
 2. **Auto Create Extra Groups** - Extra nodes go into "➕ 附加" group
 3. **Clean Empty Groups** - Auto-remove groups with no matching nodes
 4. **Cascade Cleanup** - If a group is deleted, references are updated
+5. **Auto-Set Default Node** - For selectors without an explicit `default` configuration, automatically tests TCP connection latency of leaf node children to proxy servers and sets the node with the lowest latency as `default`. If all tests fail, `default` remains unset.
 
 ### Caching
 

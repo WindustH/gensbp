@@ -1,0 +1,60 @@
+[
+	{
+		"type": "shadowsocks",
+		"tag": "jms-la1-ss",
+		"server": "c52s1.portablesubmarines.com",
+		"server_port": 13576,
+		"method": "aes-256-gcm",
+		"password": "ojcpYTzzUYPo5efh",
+		"network": "tcp"
+	},
+	{
+		"type": "shadowsocks",
+		"tag": "jms-la2-ss",
+		"server": "c52s2.portablesubmarines.com",
+		"server_port": 13576,
+		"method": "aes-256-gcm",
+		"password": "ojcpYTzzUYPo5efh",
+		"network": "tcp"
+	},
+	{
+		"type": "vmess",
+		"tag": "jms-la1-vmess",
+		"server": "c52s3.portablesubmarines.com",
+		"server_port": 13576,
+		"uuid": "df7cb6c4-ab42-45a0-94d7-ab7a5486e2db",
+		"security": "auto",
+		"alter_id": 0,
+		"network": "tcp"
+	},
+	{
+		"type": "vmess",
+		"tag": "jms-la2-vmess",
+		"server": "c52s4.portablesubmarines.com",
+		"server_port": 13576,
+		"uuid": "df7cb6c4-ab42-45a0-94d7-ab7a5486e2db",
+		"security": "auto",
+		"alter_id": 0,
+		"network": "tcp"
+	},
+	{
+		"type": "vmess",
+		"tag": "jms-la3-vmess",
+		"server": "c52s5.portablesubmarines.com",
+		"server_port": 13576,
+		"uuid": "df7cb6c4-ab42-45a0-94d7-ab7a5486e2db",
+		"security": "auto",
+		"alter_id": 0,
+		"network": "tcp"
+	},
+	{
+		"type": "vmess",
+		"tag": "jms-freedom-vmess",
+		"server": "c52s801.portablesubmarines.com",
+		"server_port": 13576,
+		"uuid": "df7cb6c4-ab42-45a0-94d7-ab7a5486e2db",
+		"security": "auto",
+		"alter_id": 0,
+		"network": "tcp"
+	}
+]
