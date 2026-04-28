@@ -6,7 +6,7 @@ from typing import Optional
 from config.constants import DEFAULT_CONFIG_JSON
 from core.generator import SingboxCfgGenerator
 from utils.fs import CONFIG_BASE, load_json, resolve_config_path
-from utils.logger import log_error, log_info, log_success
+from utils.logger import log_error, log_info, log_success, set_debug
 
 
 def load_app_config() -> Optional[dict]:
@@ -71,7 +71,15 @@ def main() -> int:
         action="store_true",
         help="Bypass cache and force re-download nodes",
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug logging",
+    )
     args = parser.parse_args()
+
+    # Set debug logging based on flag
+    set_debug(args.debug)
 
     # Load config.json
     config_json = load_app_config()

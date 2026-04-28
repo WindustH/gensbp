@@ -1,5 +1,14 @@
 """Logging utilities with ANSI colors"""
 
+# Global debug flag
+_DEBUG_ENABLED = False
+
+
+def set_debug(enabled: bool) -> None:
+    """Enable or disable debug logging."""
+    global _DEBUG_ENABLED
+    _DEBUG_ENABLED = enabled
+
 
 class Colors:
     RESET = "\033[0m"
@@ -29,4 +38,6 @@ def log_error(msg: str) -> None:
 
 
 def log_debug(msg: str) -> None:
-    print(f"{Colors.MAGENTA}[DEBUG]{Colors.RESET} {msg}")
+    """Log debug message if debug logging is enabled."""
+    if _DEBUG_ENABLED:
+        print(f"{Colors.MAGENTA}[DEBUG]{Colors.RESET} {msg}")
