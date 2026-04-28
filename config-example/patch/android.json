@@ -1,28 +1,28 @@
 {
-  "::inbounds": [
-    {
-      "type": "tun",
-      "tag": "tun-in",
-      "mtu": 9000,
-      "address": "172.19.0.1/30",
-      "auto_route": true,
-      "strict_route": true,
-      "platform": {
-        "http_proxy": {
-          "enabled": true,
-          "server": "127.0.0.1",
-          "server_port": 8889
+    "/inbounds": [
+        {
+            "type": "tun",
+            "tag": "tun-in",
+            "mtu": 9000,
+            "address": "172.19.0.1/30",
+            "auto_route": true,
+            "strict_route": true,
+            "platform": {
+                "http_proxy": {
+                    "enabled": true,
+                    "server": "127.0.0.1",
+                    "server_port": 8889
+                }
+            }
+        },
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "0.0.0.0",
+            "listen_port": 8889,
+            "tcp_fast_open": false,
+            "tcp_multi_path": false,
+            "udp_fragment": false
         }
-      }
-    },
-    {
-      "type": "mixed",
-      "tag": "mixed-in",
-      "listen": "0.0.0.0",
-      "listen_port": 8889,
-      "tcp_fast_open": false,
-      "tcp_multi_path": false,
-      "udp_fragment": false
-    }
-  ]
+    ]
 }

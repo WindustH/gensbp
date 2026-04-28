@@ -1,5 +1,5 @@
 {
-  "node_url": "https://your-subscription-url",
+  "node_url": "",
   "template": "template.json",
   "outbound_presets": "outbound-presets.json",
   "outbound_rules": "outbound-rules.json",

@@ -1,25 +1,24 @@
 {
-  "::inbounds": [
-    {
-      "type": "mixed",
-      "tag": "mixed-in",
-      "listen": "0.0.0.0",
-      "listen_port": 8889,
-      "tcp_fast_open": false,
-      "tcp_multi_path": false,
-      "udp_fragment": false
-    }
-  ],
-  "::experimental::clash_api": {
-    "external_controller": "127.0.0.1:20123",
-    "external_ui": "metacubex",
-    "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
-    "external_ui_download_detour": "🇭🇰 香港 自动",
-    "secret": "a9bc159bea1749e8ba73457771c6ac3e5261a6941341c668e034f608e783137c",
-    "default_mode": "rule",
-    "access_control_allow_origin": [
-      "*"
+    "/inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "0.0.0.0",
+            "listen_port": 8889,
+            "tcp_fast_open": false,
+            "tcp_multi_path": false,
+            "udp_fragment": false
+        }
     ],
-    "access_control_allow_private_network": false
-  }
+    "/experimental/clash_api": {
+        "external_controller": "127.0.0.1:20123",
+        "external_ui": "metacubex",
+        "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+        "external_ui_download_detour": "🇭🇰 香港 自动",
+        "secret": "a9bc159bea1749e8ba73457771c6ac3e5261a6941341c668e034f608e783137c",
+        "default_mode": "rule",
+        "access_control_allow_origin": ["*"],
+        "access_control_allow_private_network": false
+    }
 }
+

@@ -110,33 +110,40 @@ sing-box 基础配置模板：
 
 ### 补丁系统
 
-补丁文件使用 `::` 前缀语法修改配置：
+补丁文件使用 `/` 分隔路径前缀语法修改配置：
 
 ```json
 {
   // 覆盖值
-  "::log::level": "debug",
+  "/log/level": "debug",
 
-  // 合并值
-  "::dns+": {
-    "servers": [
-      {
-        "tag": "dns-local",
-        "address": "local"
-      }
-    ]
-  },
+  // 合并值（dict 合并，list 拼接）
+  "+/dns/servers": [
+    {
+      "tag": "dns-local",
+      "address": "local"
+    }
+  ],
 
   // 删除键
-  "x::experimental": null,
+  "-/experimental": null,
 
   // 替换整个配置
-  "::": { ... },
+  "/": { ... },
 
   // 通配符操作 - 批量修改列表或字典中的所有元素
-  "x::outbounds::*::domain_resolver": null,  // 删除所有 outbounds 的 domain_resolver 字段
-  "::servers::*::enabled": true,             // 将所有 servers 的 enabled 设为 true
-  "::groups::*::nodes::*::priority": 10      // 嵌套通配符：将所有 groups 中所有 nodes 的 priority 设为 10
+  "-/outbounds/*/domain_resolver": null,   // 删除所有 outbounds 的 domain_resolver
+  "/servers/*/enabled": true,              // 将所有 servers 的 enabled 设为 true
+  "/groups/*/nodes/*/priority": 10,        // 嵌套通配符
+
+  // 条件定义 - 匹配所有 type 为 "anytls" 的出站
+  "#cond/has_anytls/outbounds/*/type": "anytls",
+
+  // 条件操作 - 如果条件匹配，删除对应的出站（.. 表示回溯 1 层，即匹配到的出站本身）
+  "-/#if/has_anytls/..": null,
+
+  // 条件操作 - 如果条件匹配，修改匹配出站的 transport
+  "#if/has_anytls/../transport/type": "http"
 }
 ```
 
@@ -144,11 +151,28 @@ sing-box 基础配置模板：
 
 | 操作符 | 说明 | 示例 |
 |--------|------|------|
-| `::key` | 覆盖值 | `"::log::level": "debug"` |
-| `::key+` | 合并值（dict 合并，list 拼接） | `"::outbounds+": [...]` |
-| `x::key` | 删除键 | `"x::experimental": null` |
-| `::` | 替换整个配置 | `"::": {...}` |
-| `::+` | 合并整个配置 | `"::+": {...}` |
+| `/path` | 覆盖值 | `"/log/level": "debug"` |
+| `+/path` | 合并值（dict 合并，list 拼接） | `"+/outbounds": [...]` |
+| `-/path` | 删除键 | `"-/experimental": null` |
+| `/` | 替换整个配置 | `"/": {...}` |
+| `+/` | 合并整个配置 | `"+/": {...}` |
+
+**关键字：**
+
+| 关键字 | 说明 | 示例 |
+|--------|------|------|
+| `#cond/name/path` | 定义条件 `name`，匹配路径下值等于补丁值的节点 | `"#cond/has_anytls/outbounds/*/type": "anytls"` |
+| `#if/name/path` | 如果条件 `name` 有匹配，对每个匹配节点在相对路径执行操作 | `"-/#if/has_anytls/..": null` |
+
+**相对路径 `..`：**
+
+`..` 表示从条件匹配位置向上回溯。n 个点表示回溯 n-1 层级：
+
+| 路径 | 说明 |
+|------|------|
+| `..` | 回溯 1 层（匹配节点的父节点） |
+| `...` | 回溯 2 层 |
+| `../other` | 回溯 1 层，然后进入 `other` |
 
 **通配符 `*` 支持：**
 
@@ -156,15 +180,16 @@ sing-box 基础配置模板：
 
 | 模式 | 说明 |
 |------|------|
-| `::path::to::list::*::key` | 设置列表中每个元素的 `key` 字段 |
-| `x::path::to::dict::*::key` | 删除字典中每个值的 `key` 字段 |
-| `::path::*::subpath::*::field` | 嵌套通配符，匹配多层结构 |
+| `/path/to/list/*/key` | 设置列表中每个元素的 `key` 字段 |
+| `-/path/to/dict/*/key` | 删除字典中每个值的 `key` 字段 |
+| `/path/*/subpath/*/field` | 嵌套通配符，匹配多层结构 |
 
 **注意：**
 - 通配符只作用于字典或列表类型的元素
 - 对于列表，通配符遍历所有元素（仅处理字典类型的元素）
 - 对于字典，通配符遍历所有值（仅处理字典类型的值）
-- 追加操作 `+` 同样支持通配符（如 `::list::*::tags+`）
+- 追加操作 `+` 同样支持通配符（如 `+/list/*/tags`）
+- 条件 `#cond` 和 `#if` 按定义顺序处理，`#if` 的条件总是对当前配置状态求值
 
 ### 使用方法
 

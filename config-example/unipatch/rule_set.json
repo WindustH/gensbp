@@ -1,5 +1,5 @@
 {
-  "::route::rule_set": [
+  "/route/rule_set": [
     {
       "tag": "pixiv-site",
       "type": "remote",

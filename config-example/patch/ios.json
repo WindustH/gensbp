@@ -1,7 +1,9 @@
 {
-  "x::outbounds::*::domain_resolver": null,
-  "x::route::default_domain_resolver": null,
-  "::inbounds": [
+  "#cond/outbound_type_anytls/outbounds/*/type": "anytls",
+  "-/#if/outbound_type_anytls/..": null,
+  "-/outbounds/*/domain_resolver": null,
+  "-/route/default_domain_resolver": null,
+  "/inbounds": [
     {
       "type": "tun",
       "tag": "tun-in",
@@ -27,7 +29,7 @@
       "udp_fragment": false
     }
   ],
-  "::dns::servers": [
+  "/dns/servers": [
     {
       "tag": "114",
       "address": "114.114.114.114",

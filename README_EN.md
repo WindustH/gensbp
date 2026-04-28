@@ -110,33 +110,41 @@ Manually added extra nodes:
 
 ### Patch System
 
-Patch files use `::` prefix syntax to modify configurations:
+Patch files use `/` separated path prefix syntax to modify configurations:
 
 ```json
 {
   // Overwrite value
-  "::log::level": "debug",
+  "/log/level": "debug",
 
-  // Merge value
-  "::dns+": {
-    "servers": [
-      {
-        "tag": "dns-local",
-        "address": "local"
-      }
-    ]
-  },
+  // Merge value (dict merge, list concat)
+  "+/dns/servers": [
+    {
+      "tag": "dns-local",
+      "address": "local"
+    }
+  ],
 
   // Delete key
-  "x::experimental": null,
+  "-/experimental": null,
 
   // Replace entire config
-  "::": { ... },
+  "/": { ... },
 
   // Wildcard operations - batch modify all elements in lists or dicts
-  "x::outbounds::*::domain_resolver": null,  // Delete domain_resolver from all outbounds
-  "::servers::*::enabled": true,             // Set enabled to true for all servers
-  "::groups::*::nodes::*::priority": 10      // Nested wildcards: set priority to 10 for all nodes in all groups
+  "-/outbounds/*/domain_resolver": null,   // Delete domain_resolver from all outbounds
+  "/servers/*/enabled": true,              // Set enabled to true for all servers
+  "/groups/*/nodes/*/priority": 10,        // Nested wildcards
+
+  // Condition definition - match all outbounds with type "anytls"
+  "#cond/has_anytls/outbounds/*/type": "anytls",
+
+  // Conditional operation - if condition matches, delete the matched outbounds
+  // (.. backtracks 1 level, i.e. the outbound itself)
+  "-/#if/has_anytls/..": null,
+
+  // Conditional operation - if condition matches, modify the matched outbound's transport
+  "#if/has_anytls/../transport/type": "http"
 }
 ```
 
@@ -144,11 +152,28 @@ Patch files use `::` prefix syntax to modify configurations:
 
 | Operator | Description | Example |
 |----------|-------------|---------|
-| `::key` | Overwrite value | `"::log::level": "debug"` |
-| `::key+` | Merge value (dict merge, list concat) | `"::outbounds+": [...]` |
-| `x::key` | Delete key | `"x::experimental": null` |
-| `::` | Replace entire config | `"::": {...}` |
-| `::+` | Merge entire config | `"::+": {...}` |
+| `/path` | Overwrite value | `"/log/level": "debug"` |
+| `+/path` | Merge value (dict merge, list concat) | `"+/outbounds": [...]` |
+| `-/path` | Delete key | `"-/experimental": null` |
+| `/` | Replace entire config | `"/": {...}` |
+| `+/` | Merge entire config | `"+/": {...}` |
+
+**Keywords:**
+
+| Keyword | Description | Example |
+|---------|-------------|---------|
+| `#cond/name/path` | Define condition `name` that matches nodes at path whose value equals the patch value | `"#cond/has_anytls/outbounds/*/type": "anytls"` |
+| `#if/name/path` | If condition `name` has matches, apply operation at the given path relative to each match | `"-/#if/has_anytls/..": null` |
+
+**Relative Paths `..`:**
+
+`..` backtracks from the condition match position. n dots = backtrack n-1 levels:
+
+| Path | Description |
+|------|-------------|
+| `..` | Backtrack 1 level (parent of matched node) |
+| `...` | Backtrack 2 levels |
+| `../other` | Backtrack 1 level, then descend into `other` |
 
 **Wildcard `*` Support:**
 
@@ -156,15 +181,16 @@ Wildcard `*` can be used in paths to match all elements at the current level (ea
 
 | Pattern | Description |
 |------|------|
-| `::path::to::list::*::key` | Set `key` field for each element in the list |
-| `x::path::to::dict::*::key` | Delete `key` field from each value in the dict |
-| `::path::*::subpath::*::field` | Nested wildcards, matches multi-level structures |
+| `/path/to/list/*/key` | Set `key` field for each element in the list |
+| `-/path/to/dict/*/key` | Delete `key` field from each value in the dict |
+| `/path/*/subpath/*/field` | Nested wildcards, matches multi-level structures |
 
 **Notes:**
 - Wildcards only operate on dict or list elements
 - For lists, wildcard iterates all elements (only processes dict-type elements)
 - For dicts, wildcard iterates all values (only processes dict-type values)
-- Append operations `+` also support wildcards (e.g., `::list::*::tags+`)
+- Append operations `+` also support wildcards (e.g., `+/list/*/tags`)
+- Conditions `#cond` and `#if` are processed in definition order; `#if` always evaluates against the current config state
 
 ### Usage
 
