@@ -4,11 +4,8 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
+from config.constants import CONFIG_BASE
 from utils.logger import log_debug, log_error, log_warning
-
-
-# Default config directory
-CONFIG_BASE = Path.home() / ".config" / "gensbp"
 
 
 def resolve_config_path(path: Optional[str], base_dir: Path = CONFIG_BASE) -> Optional[str]:

@@ -3,7 +3,7 @@
 import argparse
 from typing import Optional
 
-from config.constants import DEFAULT_CONFIG_JSON
+from config.constants import DEFAULT_CONFIG_FILE
 from core.generator import SingboxCfgGenerator
 from utils.fs import CONFIG_BASE, load_json, resolve_config_path
 from utils.logger import log_error, log_info, log_success, set_debug
@@ -11,8 +11,8 @@ from utils.logger import log_error, log_info, log_success, set_debug
 
 def load_app_config() -> Optional[dict]:
     """Load config.json from the config directory."""
-    config_json_path = str(CONFIG_BASE / DEFAULT_CONFIG_JSON)
-    return load_json(config_json_path, "Failed to load config.json")
+    config_json_path = str(CONFIG_BASE / DEFAULT_CONFIG_FILE)
+    return load_json(config_json_path, f"Failed to load {DEFAULT_CONFIG_FILE}")
 
 
 def get_config_value(config: dict, args: argparse.Namespace, key: str) -> Optional[str]:
@@ -84,8 +84,8 @@ def main() -> int:
     # Load config.json
     config_json = load_app_config()
     if not config_json:
-        log_error(f"Cannot load {DEFAULT_CONFIG_JSON} from {CONFIG_BASE}")
-        log_error(f"Please provide {DEFAULT_CONFIG_JSON} with: node_url, template, outbound_presets")
+        log_error(f"Cannot load {DEFAULT_CONFIG_FILE} from {CONFIG_BASE}")
+        log_error(f"Please provide {DEFAULT_CONFIG_FILE} with: node_url, template, outbound_presets")
         return 1
 
     # Get values from config.json or command line

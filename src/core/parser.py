@@ -5,7 +5,36 @@ import json
 from typing import Any, Dict, Optional
 from urllib.parse import parse_qs, unquote, urlparse
 
+from config.constants import (
+    DEFAULT_ENCODING,
+    DEFAULT_PORT,
+    SCHEME_ANYTLS,
+    SCHEME_HTTPS,
+    SCHEME_SSOCKS,
+    SCHEME_TROJAN,
+    SCHEME_TUIC,
+    SCHEME_VMESS,
+    SSOCKS_TLS_PORTS,
+    TLS_DEFAULT_INSECURE,
+    TLS_FINGERPRINT,
+    TUIC_DEFAULT_ALPN,
+    TUIC_DEFAULT_CONGESTION,
+    TUIC_UDP_RELAY_MODE,
+    VMESS_DEFAULT_ALTER_ID,
+    VMESS_DEFAULT_PATH,
+    VMESS_DEFAULT_SECURITY,
+    VMESS_DEFAULT_TRANSPORT,
+)
 from utils.logger import log_error, log_warning
+
+
+def _extract_hostname(netloc: str) -> str:
+    """Extract hostname from netloc, preserving case (unlike urlparse.hostname)."""
+    if "@" in netloc:
+        netloc = netloc.split("@", 1)[1]
+    if "]:" in netloc:  # IPv6
+        return netloc.rsplit("]:", 1)[0] + "]"
+    return netloc.rsplit(":", 1)[0]
 
 
 def parse_node_line(line: str) -> Optional[Dict[str, Any]]:
@@ -24,30 +53,30 @@ def parse_node_line(line: str) -> Optional[Dict[str, Any]]:
             qs = parse_qs(parsed.query)
             if "remarks" in qs:
                 tag = unquote(qs["remarks"][0])
-            elif config_part.startswith("vmess://"):
-                encoded = config_part[8:]
+            elif config_part.startswith(SCHEME_VMESS):
+                encoded = config_part[len(SCHEME_VMESS):]
                 padded = encoded + "=" * (-len(encoded) % 4)
-                decoded = base64.b64decode(padded).decode("utf-8")
+                decoded = base64.b64decode(padded).decode(DEFAULT_ENCODING)
                 vmess_config = json.loads(decoded)
                 tag = vmess_config.get("ps", f"Unknown-{abs(hash(line)) % (10**10)}")
             else:
                 tag = f"Unknown-{abs(hash(line)) % (10**10)}"
         except Exception as e:
-            if config_part.startswith("vmess://"):
+            if config_part.startswith(SCHEME_VMESS):
                 log_warning(f"Failed to extract VMess tag, using fallback: {e}")
             tag = f"Unknown-{abs(hash(line)) % (10**10)}"
 
-    if config_part.startswith("vmess://"):
+    if config_part.startswith(SCHEME_VMESS):
         return parse_vmess(config_part, tag)
-    elif config_part.startswith("trojan://"):
+    elif config_part.startswith(SCHEME_TROJAN):
         return parse_trojan(config_part, tag)
-    elif config_part.startswith("https://"):
+    elif config_part.startswith(SCHEME_HTTPS):
         return parse_https(config_part, tag)
-    elif config_part.startswith("ssocks://"):
+    elif config_part.startswith(SCHEME_SSOCKS):
         return parse_ssocks(config_part, tag)
-    elif config_part.startswith("anytls://"):
+    elif config_part.startswith(SCHEME_ANYTLS):
         return parse_anytls(config_part, tag)
-    elif config_part.startswith("tuic://"):
+    elif config_part.startswith(SCHEME_TUIC):
         return parse_tuic(config_part, tag)
     else:
         log_warning(f"Unknown protocol in: {line}")
@@ -57,14 +86,14 @@ def parse_node_line(line: str) -> Optional[Dict[str, Any]]:
 def parse_vmess(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
     """Parse VMess configuration."""
     try:
-        encoded = config_str[8:]
+        encoded = config_str[len(SCHEME_VMESS):]
         padded = encoded + "=" * (-len(encoded) % 4)
-        decoded = base64.b64decode(padded).decode("utf-8")
+        decoded = base64.b64decode(padded).decode(DEFAULT_ENCODING)
         config = json.loads(decoded)
 
         transport = {
-            "type": config.get("net", "ws"),
-            "path": config.get("path", "/"),
+            "type": config.get("net", VMESS_DEFAULT_TRANSPORT),
+            "path": config.get("path", VMESS_DEFAULT_PATH),
         }
         if config.get("host"):
             transport["headers"] = {"Host": config["host"]}
@@ -75,8 +104,8 @@ def parse_vmess(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
             "server": config["add"],
             "server_port": int(config["port"]),
             "uuid": config["id"],
-            "security": config.get("scy", "auto"),
-            "alter_id": int(config.get("aid", 0)),
+            "security": config.get("scy", VMESS_DEFAULT_SECURITY),
+            "alter_id": int(config.get("aid", VMESS_DEFAULT_ALTER_ID)),
             "transport": transport,
         }
 
@@ -84,8 +113,8 @@ def parse_vmess(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
             result["tls"] = {
                 "enabled": True,
                 "server_name": config.get("host", config["add"]),
-                "insecure": True,
-                "utls": {"enabled": True, "fingerprint": "chrome"},
+                "insecure": TLS_DEFAULT_INSECURE,
+                "utls": {"enabled": True, "fingerprint": TLS_FINGERPRINT},
             }
         return result
     except Exception as e:
@@ -97,8 +126,8 @@ def parse_trojan(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
     """Parse Trojan configuration."""
     try:
         parsed_url = urlparse(config_str)
-        server = parsed_url.hostname
-        port = parsed_url.port or 443
+        server = _extract_hostname(parsed_url.netloc)
+        port = parsed_url.port or DEFAULT_PORT
         password = parsed_url.username
         query_params = parse_qs(parsed_url.query)
 
@@ -115,7 +144,7 @@ def parse_trojan(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
                 "enabled": True,
                 "server_name": sni,
                 "insecure": insecure,
-                "utls": {"enabled": True, "fingerprint": "chrome"},
+                "utls": {"enabled": True, "fingerprint": TLS_FINGERPRINT},
             },
         }
     except Exception as e:
@@ -126,12 +155,12 @@ def parse_trojan(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
 def parse_https(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
     """Parse HTTPS (Trojan over HTTPS) configuration."""
     try:
-        encoded_part = config_str[8:].split("#")[0]
-        decoded = base64.b64decode(encoded_part).decode("utf-8")
+        encoded_part = config_str[len(SCHEME_HTTPS):].split("#")[0]
+        decoded = base64.b64decode(encoded_part).decode(DEFAULT_ENCODING)
         if "@" in decoded:
             credentials, server_info = decoded.split("@", 1)
             server = server_info.split("#")[0].split(":")[0]
-            port = int(server_info.split("#")[0].split(":")[1]) if ":" in server_info else 443
+            port = int(server_info.split("#")[0].split(":")[1]) if ":" in server_info else DEFAULT_PORT
             return {
                 "tag": tag,
                 "type": "trojan",
@@ -141,8 +170,8 @@ def parse_https(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
                 "tls": {
                     "enabled": True,
                     "server_name": server,
-                    "insecure": True,
-                    "utls": {"enabled": True, "fingerprint": "chrome"},
+                    "insecure": TLS_DEFAULT_INSECURE,
+                    "utls": {"enabled": True, "fingerprint": TLS_FINGERPRINT},
                 },
             }
     except Exception as e:
@@ -156,13 +185,13 @@ def parse_ssocks(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
         parsed_url = urlparse(config_str)
         encoded_part = parsed_url.netloc
         padded = encoded_part + "=" * (-len(encoded_part) % 4)
-        decoded = base64.b64decode(padded).decode("utf-8")
-        
+        decoded = base64.b64decode(padded).decode(DEFAULT_ENCODING)
+
         credentials, server_info = decoded.split("@", 1)
         user, password = credentials.split(":", 1)
         server, port_str = server_info.split(":", 1)
         port = int(port_str)
-        
+
         result = {
             "tag": tag,
             "type": "http",
@@ -171,16 +200,15 @@ def parse_ssocks(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
             "username": user,
             "password": password,
         }
-        
-        # Enable TLS for typical HTTPS ports
-        if port in (443, 8443, 20443, 22881):
+
+        if port in SSOCKS_TLS_PORTS:
             result["tls"] = {
                 "enabled": True,
                 "server_name": server,
-                "insecure": True,
-                "utls": {"enabled": True, "fingerprint": "chrome"},
+                "insecure": TLS_DEFAULT_INSECURE,
+                "utls": {"enabled": True, "fingerprint": TLS_FINGERPRINT},
             }
-            
+
         return result
     except Exception as e:
         log_error(f"Error parsing ssocks {tag}: {e}")
@@ -191,8 +219,8 @@ def parse_anytls(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
     """Parse AnyTLS configuration."""
     try:
         parsed_url = urlparse(config_str)
-        server = parsed_url.hostname
-        port = parsed_url.port or 443
+        server = _extract_hostname(parsed_url.netloc)
+        port = parsed_url.port or DEFAULT_PORT
         password = parsed_url.username
 
         return {
@@ -204,8 +232,8 @@ def parse_anytls(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
             "tls": {
                 "enabled": True,
                 "server_name": server,
-                "insecure": True,
-                "utls": {"enabled": True, "fingerprint": "chrome"},
+                "disable_sni": False,
+                "utls": {"enabled": True, "fingerprint": TLS_FINGERPRINT},
             },
         }
     except Exception as e:
@@ -217,14 +245,14 @@ def parse_tuic(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
     """Parse TUIC configuration."""
     try:
         parsed_url = urlparse(config_str)
-        server = parsed_url.hostname
-        port = parsed_url.port or 443
+        server = _extract_hostname(parsed_url.netloc)
+        port = parsed_url.port or DEFAULT_PORT
         uuid = parsed_url.username
         password = parsed_url.password
         query_params = parse_qs(parsed_url.query)
 
-        congestion_control = query_params.get("congestion_control", ["cubic"])[0]
-        alpn = query_params.get("alpn", ["h3"])[0]
+        congestion_control = query_params.get("congestion_control", [TUIC_DEFAULT_CONGESTION])[0]
+        alpn = query_params.get("alpn", [TUIC_DEFAULT_ALPN])[0]
 
         return {
             "tag": tag,
@@ -234,15 +262,15 @@ def parse_tuic(config_str: str, tag: str) -> Optional[Dict[str, Any]]:
             "uuid": uuid,
             "password": password,
             "congestion_control": congestion_control,
+            "udp_relay_mode": TUIC_UDP_RELAY_MODE,
             "tls": {
                 "enabled": True,
                 "server_name": server,
-                "insecure": True,
+                "insecure": TLS_DEFAULT_INSECURE,
                 "alpn": [alpn],
-                "utls": {"enabled": True, "fingerprint": "chrome"},
+                "utls": {"enabled": True, "fingerprint": TLS_FINGERPRINT},
             },
         }
     except Exception as e:
         log_error(f"Error parsing TUIC {tag}: {e}")
         return None
-

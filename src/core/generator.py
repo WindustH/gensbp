@@ -5,7 +5,7 @@ from typing import Any, Dict, List
 
 import requests
 
-from config.constants import PROXY_PROTOCOLS
+from config.constants import DEFAULT_ENCODING, PROXY_PROTOCOLS, REQUEST_TIMEOUT
 from core.parser import parse_node_line
 from core.patch import apply_patches
 from core.selector import generate_selector_groups
@@ -128,9 +128,9 @@ class SingboxCfgGenerator:
 
         try:
             log_info("Downloading nodes...")
-            response = requests.get(self.node_url, timeout=30)
+            response = requests.get(self.node_url, timeout=REQUEST_TIMEOUT)
             response.raise_for_status()
-            decoded_data = base64.b64decode(response.text).decode("utf-8")
+            decoded_data = base64.b64decode(response.text).decode(DEFAULT_ENCODING)
             lines = [line.strip() for line in decoded_data.split("\n") if line.strip()]
             log_success(f"Downloaded {len(lines)} node lines")
 
